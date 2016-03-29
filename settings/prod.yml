@@ -1,0 +1,15 @@
+google_analytics:
+    service_account_email: 1098185280624-0bck3g5h4itu39vsln0fd8evgbar6gd6@developer.gserviceaccount.com
+    key_file_location: "settings/Certificates/DesktopApp.p12"
+
+amazon_redshift:
+    dbname: fivetran
+    user: admin
+    pwd: 2307Leghorn
+    host: my-fivetran-instance.cqlootvljsue.us-west-2.redshift.amazonaws.com
+    port: 5439
+
+ga_python_service_database:
+    dbname: fivetran
+    schema: h2ogadata
+    table_name: gadata

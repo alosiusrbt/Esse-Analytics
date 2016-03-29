@@ -1,0 +1,166 @@
+{% extends 'base_htmls/dashboard_layout.html' %}
+{% block render_body %}
+
+<!-- Main content -->
+<section class="content">
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<div class="box box-default">
+				<div class="box-header with-border">
+					<h3 class="box-title">Session Duration</h3>
+				</div>
+				<div class="box-body">
+					<table id="session_table" class="table table-bordered table-striped datatable">
+		                <thead>
+		                  <tr>
+		                  	<th>Profile Name</th>
+		                  	<th>Sessions</th>
+		                  	<th>Session Duration</th>
+		                  	<th>Avg. Session Duration</th>
+		                  </tr>
+		                </thead>
+		                <tbody>
+		                  {% for colArr in resultSet.AvgSession %}
+		                  <tr>
+		                    <td>{{colArr.profileName}}</td>
+		                    <td>{{colArr.sessions}}</td>
+		                    <td>{{colArr.sessionDuration}}</td>
+		                    <td>{{colArr.avgSessionDuration}}</td>
+		                  </tr>
+		                  {% endfor %}
+		                </tbody>
+		                <tfoot>
+		                  <tr>
+		                  	<th>Profile Name</th>
+		                  	<th>Sessions</th>
+		                  	<th>Session Duration</th>
+		                  	<th>Avg. Session Duration</th>
+		                  </tr>
+		                </tfoot>
+		            </table>
+				</div><!-- /.box-body -->
+			</div><!-- /.box -->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<table id="" class="table table-bordered table-striped datatable">
+                <thead>
+                	<tr>
+                	</tr>
+                </thead>
+            </table>
+		</div>
+	</div>
+  <!-- Main row -->
+  <div class="row">
+    <div class="col-md-7 col-sm-12">
+    	<div class="box box-danger">
+			<div class="box-header with-border">
+				<h3 class="box-title">Donut Chart</h3>
+				<div class="box-tools pull-right">
+					<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+					<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+				</div>
+			</div>
+			<div class="box-body">
+				<canvas id="pieChart_" style="height:250px"></canvas>
+			</div><!-- /.box-body -->
+		</div><!-- /.box -->  
+    </div>
+    <div class="col-md-5 col-sm-12">
+      <div id="over_all_controller_table">
+        <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Page Views - </h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <table profileName>
+          </table>
+          {{resultSet.TimeOnPage}}
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+        
+      </div>
+    </div>
+  </div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".datatable").DataTable();
+		//-------------
+        //- PIE CHART -
+        //-------------
+        // Get context with jQuery - using jQuery's .get() method.
+        var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+        var pieChart = new Chart(pieChartCanvas);
+        var PieData = [
+          {
+            value: 700,
+            color: "#f56954",
+            highlight: "#f56954",
+            label: "Chrome"
+          },
+          {
+            value: 500,
+            color: "#00a65a",
+            highlight: "#00a65a",
+            label: "IE"
+          },
+          {
+            value: 400,
+            color: "#f39c12",
+            highlight: "#f39c12",
+            label: "FireFox"
+          },
+          {
+            value: 600,
+            color: "#00c0ef",
+            highlight: "#00c0ef",
+            label: "Safari"
+          },
+          {
+            value: 300,
+            color: "#3c8dbc",
+            highlight: "#3c8dbc",
+            label: "Opera"
+          },
+          {
+            value: 100,
+            color: "#d2d6de",
+            highlight: "#d2d6de",
+            label: "Navigator"
+          }
+        ];
+        var pieOptions = {
+          //Boolean - Whether we should show a stroke on each segment
+          segmentShowStroke: true,
+          //String - The colour of each segment stroke
+          segmentStrokeColor: "#fff",
+          //Number - The width of each segment stroke
+          segmentStrokeWidth: 2,
+          //Number - The percentage of the chart that we cut out of the middle
+          percentageInnerCutout: 50, // This is 0 for Pie charts
+          //Number - Amount of animation steps
+          animationSteps: 100,
+          //String - Animation easing effect
+          animationEasing: "easeOutBounce",
+          //Boolean - Whether we animate the rotation of the Doughnut
+          animateRotate: true,
+          //Boolean - Whether we animate scaling the Doughnut from the centre
+          animateScale: false,
+          //Boolean - whether to make the chart responsive to window resizing
+          responsive: true,
+          // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+          maintainAspectRatio: true,
+                    
+        };
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        pieChart.Doughnut(PieData, pieOptions);
+	});
+	</script>
+
+  
+</section><!-- /.content -->
+
+{% endblock render_body %}

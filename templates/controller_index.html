@@ -1,0 +1,87 @@
+{% extends 'base_htmls/dashboard_layout.html' %} {% block render_body %}
+  <section id="separate_controllers">
+    <div class="row to_be_cloned hidden">
+      <div class="col-md-6 col-xs-12">
+        <canvas id="separate_bar_chart">
+        </canvas>
+        <div id="legendDiv" class="legend-container"></div>
+      </div>
+      <div class="col-md-5 col-md-offset-1 col-xs-12" id="separate_table_chart">
+      </div>
+    </div>
+  </section>
+  <div class="row">
+    <div class="col-md-12 col-sm-12">
+<canvas id="myChart"></canvas>
+</div>
+</div>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load("visualization", "1", {packages:["table","corechart","bar"]});
+  
+  google.setOnLoadCallback(drawSeparateChart);
+  
+
+
+  function drawSeparateChart() {
+    
+    $.each({{resultSet.separateData|safe}}, function(index,element){
+      var table_chart;
+      var table_options;
+      
+
+      console.log(element.rows);
+
+      dataTable = google.visualization.arrayToDataTable(element.rows);
+
+      table_options = {
+        title: 'Over All Controller',
+      };
+      var html_String = $(".to_be_cloned").clone();
+      html_String.removeClass("to_be_cloned hidden");
+      html_String.find("#separate_table_chart").prop("id", "separate_table_chart_" + index);
+      html_String.find("#separate_bar_chart").prop("id", "separate_bar_chart_" + index);
+      html_String.find("#legendDiv").prop("id", "legendDiv_" + index);
+      $("#separate_controllers").append(html_String);
+      table_chart = new google.visualization.Table(document.getElementById("separate_table_chart_"+index));
+      table_chart.draw(dataTable, table_options);
+
+
+      var t = element.rows;
+      t = t.splice(1,t.length-1);
+      var data = {
+        labels: $.map(t,function(e,i){ return e[0]; }),
+        datasets: [
+            {
+                label: "",
+                fillColor: "rgba(220,220,220,0.5)",
+                strokeColor: "rgba(220,220,220,0.8)",
+                highlightFill: "rgba(220,220,220,0.75)",
+                highlightStroke: "rgba(220,220,220,1)",
+                data: $.map(t,function(e,i){ return e[1]; })
+            },
+            {
+                label: "My Second dataset",
+                fillColor: "rgba(151,187,205,0.5)",
+                strokeColor: "rgba(151,187,205,0.8)",
+                highlightFill: "rgba(151,187,205,0.75)",
+                highlightStroke: "rgba(151,187,205,1)",
+                data: $.map(t,function(e,i){ return e[2]; })
+            }
+        ]
+    };
+    var ctx = document.getElementById("separate_bar_chart_" + index).getContext("2d");
+    var myBarChart = new Chart(ctx).Bar(data, {
+      responsive: true,
+      pointDotRadius: 10,
+      bezierCurve: false,
+      scaleShowVerticalLines: false,
+      scaleGridLineColor: 'black'
+    });
+    document.getElementById("legendDiv_"+index).innerHTML = myBarChart.generateLegend();
+    });
+    
+  }
+</script>
+
+{% endblock render_body %}

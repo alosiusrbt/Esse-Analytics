@@ -1,0 +1,353 @@
+{% extends 'base_htmls/dashboard_layout.html' %} {% block render_body %}
+<!-- Main content -->
+<section class="content">
+  <!-- Small boxes (Stat box) -->
+  <div class="row">
+    <div class="col-lg-4 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-aqua">
+        <div class="inner">
+          <h3>{{resultSet.controllers|round|int}}</h3>
+          <p>Controller</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-bag"></i>
+        </div>
+        <a href="{{url_for('separate_controller_dashboard')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-4 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-green">
+        <div class="inner">
+          <h3>{{resultSet.percentNewSessions|round|float}}<sup style="font-size: 20px">%</sup></h3>
+          <p>% of New Sessions</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-stats-bars"></i>
+        </div>
+        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-4 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-yellow">
+        <div class="inner">
+          <h3>{{resultSet.sessionCount|round|int}}</h3>
+          <p>Session Count</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-person-add"></i>
+        </div>
+        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+
+  </div>
+  <!-- /.row -->
+
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="box box-default">
+        <div class="box-header with-border">
+          <h3 class="box-title">Session Duration</h3>
+        </div>
+        <div class="box-body">
+          <table id="session_table" class="table table-bordered table-striped dataTable">
+            <thead>
+              <tr>
+                <th>Profile Name</th>
+                <th>Sessions</th>
+                <th>Session Duration</th>
+                <th>Avg. Session Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for colArr in sessionDetails.AvgSession %}
+              <tr>
+                <td>{{colArr.profileName}}</td>
+                <td>{{colArr.sessions}}</td>
+                <td>{{colArr.sessionDuration}}</td>
+                <td>{{colArr.avgSessionDuration}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Profile Name</th>
+                <th>Sessions</th>
+                <th>Session Duration</th>
+                <th>Avg. Session Duration</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+  </div>
+  <!-- Main row -->
+  <!-- BAR CHART -->
+  <div class="box box-success">
+    <div class="box-header with-border">
+      <h3 class="box-title">Page views </h3>
+      <div class="box-tools pull-right">
+        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-md-7 col-sm-12">
+
+          <div class="chart">
+            <canvas id="over_all_bar_chart" style="height:500px"></canvas>
+            <div id="legendDiv_pageview" class="legend-container"></div>
+          </div>
+
+        </div>
+        <div class="col-md-5 col-sm-12">
+          <div id="over_all_controller_table">
+            <table id="overall-pageviews" excel-title="Page Views for all controllers " class="table table-bordered table-striped dataTable">
+              <thead>
+                {% for colArr in consolidatedResultSet.consolidatedResult_Columns %}
+                <tr>
+                  {% for col in colArr %}
+                  <th>{{col}}</th>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </thead>
+              <tbody>
+                {% for colArr in consolidatedResultSet.consolidatedResult_Data %}
+                <tr>
+                  {% for col in colArr %}
+                  <td>{{col}}</td>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                {% for colArr in consolidatedResultSet.consolidatedResult_Columns %}
+                <tr>
+                  {% for col in colArr %}
+                  <th>{{col}}</th>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+  <!-- BAR CHART -->
+  <div class="box box-success">
+    <div class="box-header with-border">
+      <h3 class="box-title">Time spent per page</h3>
+      <div class="box-tools pull-right">
+        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-md-7 col-sm-12">
+
+          <div class="chart">
+            <canvas id="over_all_time_on_page" style="height:500px"></canvas>
+            <div id="legendDiv_time" class="legend-container"></div>
+          </div>
+
+        </div>
+        <div class="col-md-5 col-sm-12">
+          <div id="over_all_controller_table">
+
+
+            <table id="overall-time-on-page" class="table table-bordered table-striped dataTable">
+              <thead>
+                {% for colArr in TimeOnPage.colHeader %}
+                <tr>
+                  {% for col in colArr %}
+                  <th>{{col}}</th>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </thead>
+              <tbody>
+                {% for colArr in TimeOnPage.data %}
+                <tr>
+                  {% for col in colArr %}
+                  <td>{{col}}</td>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                {% for colArr in TimeOnPage.colHeader %}
+                <tr>
+                  {% for col in colArr %}
+                  <th>{{col}}</th>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </tfoot>
+            </table>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+</section>
+<!-- /.content -->
+
+{% endblock render_body %}
+{% block render_js_files %}
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="//cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="//cdn.datatables.net/buttons/1.1.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="//cdn.datatables.net/buttons/1.1.2/js/buttons.print.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+
+    $.each($(".dataTable"),function(){
+      $(this).DataTable({
+        "dom": 'Bfrtip',
+        "buttons": [{
+          extend: 'excel',
+          title: "'"+($(this).attr("excel-title")?$(this).attr("excel-title"):$(this).parents(".box").first().find(".box-title").text())+"'"
+        }],
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false
+      });
+    });
+
+    //-------------
+    //- BAR CHART -
+    //-------------
+    var barChartCanvas = $("#over_all_bar_chart").get(0).getContext("2d");
+    var dtta = {{consolidatedResultSet.consolidatedResult_Data|safe}};
+    var page_view_headers = {{consolidatedResultSet.consolidatedResult_Columns|safe}};
+    var barChartData = {
+      labels: $.map(dtta, function(e, i) {
+        return e[0];
+      }),
+      datasets: [{
+        label: page_view_headers[0][1],
+        fillColor: "rgba(210, 214, 222, 1)",
+        strokeColor: "rgba(210, 214, 222, 1)",
+        pointColor: "rgba(210, 214, 222, 1)",
+        pointStrokeColor: "#c1c7d1",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: $.map(dtta, function(e, i) {
+          return e[1];
+        })
+      }, {
+        label: page_view_headers[0][2],
+        fillColor: "rgba(60,141,188,0.9)",
+        strokeColor: "rgba(60,141,188,0.8)",
+        pointColor: "#3b8bba",
+        pointStrokeColor: "rgba(60,141,188,1)",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(60,141,188,1)",
+        data: $.map(dtta, function(e, i) {
+          return e[2];
+        })
+      }]
+    };
+    barChartData.datasets[1].fillColor = "#00a65a";
+    barChartData.datasets[1].strokeColor = "#00a65a";
+    barChartData.datasets[1].pointColor = "#00a65a";
+    var barChartOptions = {
+      //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+      scaleBeginAtZero: true,
+      //Boolean - Whether grid lines are shown across the chart
+      scaleShowGridLines: true,
+      //String - Colour of the grid lines
+      scaleGridLineColor: "rgba(0,0,0,.05)",
+      //Number - Width of the grid lines
+      scaleGridLineWidth: 1,
+      //Boolean - Whether to show horizontal lines (except X axis)
+      scaleShowHorizontalLines: true,
+      //Boolean - Whether to show vertical lines (except Y axis)
+      scaleShowVerticalLines: true,
+      //Boolean - If there is a stroke on each bar
+      barShowStroke: true,
+      //Number - Pixel width of the bar stroke
+      barStrokeWidth: 2,
+      //Number - Spacing between each of the X value sets
+      barValueSpacing: 5,
+      //Number - Spacing between data sets within X values
+      barDatasetSpacing: 1,
+
+      //Boolean - whether to make the chart responsive
+      responsive: true,
+      maintainAspectRatio: true
+    };
+
+    barChartOptions.datasetFill = false;
+    var barChart = new Chart( barChartCanvas).Bar(barChartData, barChartOptions);
+    document.getElementById("legendDiv_pageview").innerHTML = barChart.generateLegend();
+    //-------------
+    //- BAR CHART -
+    //-------------
+    var barChartCanvas_time = $("#over_all_time_on_page").get(0).getContext("2d");
+    
+    var dtta_time = {{TimeOnPage.data|safe}};
+    var pageview_time_headers = {{TimeOnPage.colHeader|safe}};
+    var barChartData_time = {
+      labels: $.map(dtta_time, function(e, i) {
+        return e[0];
+      }),
+      datasets: [{
+        label: pageview_time_headers[0][1],
+        fillColor: "rgba(210, 214, 222, 1)",
+        strokeColor: "rgba(210, 214, 222, 1)",
+        pointColor: "rgba(210, 214, 222, 1)",
+        pointStrokeColor: "#c1c7d1",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: $.map(dtta_time, function(e, i) {
+          return e[1];
+        })
+      }, {
+        label: pageview_time_headers[0][2],
+        fillColor: "rgba(60,141,188,0.9)",
+        strokeColor: "rgba(60,141,188,0.8)",
+        pointColor: "#3b8bba",
+        pointStrokeColor: "rgba(60,141,188,1)",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(60,141,188,1)",
+        data: $.map(dtta_time, function(e, i) {
+          return e[2];
+        })
+      }]
+    };
+    barChartData_time.datasets[1].fillColor = "#00a65a";
+    barChartData_time.datasets[1].strokeColor = "#00a65a";
+    barChartData_time.datasets[1].pointColor = "#00a65a";
+    
+
+    barChartOptions.datasetFill = false;
+    var barChart_time  = new Chart( barChartCanvas_time).Bar(barChartData_time, barChartOptions);
+    document.getElementById("legendDiv_time").innerHTML = barChart_time.generateLegend();
+  });
+</script>
+{% endblock render_js_files %}

@@ -1,0 +1,103 @@
+<html>
+
+<head>
+  <title>ESSE Analytics</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/google-visualization-override.css') }}" />
+  <script type="text/javascript" src="{{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
+</head>
+
+<body class="container">
+  <div class="row">
+    <div class="col-md-12 col-sm-12">
+      <canvas id="over_all_bar_chart"></canvas>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <div id="over_all_controller_table">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-sm-12">
+      <canvas id="myChart"></canvas>
+    </div>
+  </div>
+  <script type="text/javascript" src="{{ url_for('static', filename='bower_components/Chart.js/Chart.min.js') }}"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+
+    })
+  </script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    google.load("visualization", "1", {
+      packages: ["table", "corechart", "bar"]
+    });
+    google.setOnLoadCallback(drawChart);
+    google.setOnLoadCallback(drawPieChart);
+
+
+    function drawPieChart() {
+
+      var t = {
+        {
+          resultSet.consolidatedResult | safe
+        }
+      };
+      t = t.splice(1, t.length - 1);
+      var data = {
+        labels: $.map(t, function(e, i) {
+          return e[0];
+        }),
+        datasets: [{
+          label: "",
+          fillColor: "rgba(220,220,220,0.5)",
+          strokeColor: "rgba(220,220,220,0.8)",
+          highlightFill: "rgba(220,220,220,0.75)",
+          highlightStroke: "rgba(220,220,220,1)",
+          data: $.map(t, function(e, i) {
+            return e[1];
+          })
+        }, {
+          label: "My Second dataset",
+          fillColor: "rgba(151,187,205,0.5)",
+          strokeColor: "rgba(151,187,205,0.8)",
+          highlightFill: "rgba(151,187,205,0.75)",
+          highlightStroke: "rgba(151,187,205,1)",
+          data: $.map(t, function(e, i) {
+            return e[2];
+          })
+        }]
+      };
+      var ctx = document.getElementById("over_all_bar_chart").getContext("2d");
+      var myBarChart = new Chart(ctx).Bar(data, {
+        responsive: true,
+        pointDotRadius: 10,
+        bezierCurve: false,
+        scaleShowVerticalLines: false,
+        scaleGridLineColor: 'black'
+      });
+
+
+    }
+
+
+    function drawChart() {
+      var table_chart;
+      var table_options;
+      dataTable = google.visualization.arrayToDataTable({
+        {
+          resultSet.consolidatedResult | safe
+        }
+      });
+
+      table_options = {
+        title: 'Over All Controller',
+      };
+
+      table_chart = new google.visualization.Table(document.getElementById('over_all_controller_table'));
+      table_chart.draw(dataTable, table_options);
+
+    }
+  </script>

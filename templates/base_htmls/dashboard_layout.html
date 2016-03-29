@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}ESSE GA{% endblock title %}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    {% include "base_htmls/partial/_css_files.html" %}
+    <style type="text/css">
+    table th{
+      text-transform: capitalize;
+    }
+    .legend-container ul {
+      list-style: none;
+    }
+    .legend-container ul li {
+      display: block;
+      padding-left: 30px;
+      position: relative;
+      margin-bottom: 4px;
+      border-radius: 5px;
+      padding: 2px 8px 2px 28px;
+      font-size: 14px;
+      cursor: default;
+      -webkit-transition: background-color 200ms ease-in-out;
+      -moz-transition: background-color 200ms ease-in-out;
+      -o-transition: background-color 200ms ease-in-out;
+      transition: background-color 200ms ease-in-out;
+    }
+    .legend-container ul li span {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 100%;
+      border-radius: 5px;
+    }
+
+    </style>
+  </head>
+  <body class="hold-transition skin-blue sidebar-mini">
+    
+  	<!-- jQuery 2.1.4 -->
+    <script src="{{ url_for('static', filename='plugins/jQuery/jQuery-2.1.4.min.js')}}"></script>
+    <div class="wrapper">
+
+      <header class="main-header">
+        <!-- Logo -->
+        <a href="{{url_for('theme_dashboard')}}" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <span class="logo-mini"><b>ESSE</b></span>
+          <!-- logo for regular state and mobile devices -->
+          <span class="logo-lg"><b>ESSE</b></span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+        </nav>
+      </header>
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+          
+          
+          <!-- sidebar menu: : style can be found in sidebar.less -->
+          <ul class="sidebar-menu">
+            <li class="header">MAIN NAVIGATION</li>
+            <li class="active">
+              <a href="{{url_for('theme_dashboard')}}">
+                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+              </a>
+            </li>
+            
+            
+          </ul>
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+            <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Dashboard
+            <small>Control panel</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+          </ol>
+        </section>
+  	{% block render_body %}
+  	{% endblock render_body %}
+    </div><!-- /.content-wrapper -->
+      {% include("base_htmls/partial/_footer.html") %}
+
+      <!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+      <div class="control-sidebar-bg"></div>
+    <!-- ./wrapper -->
+  </div>
+  	{% include "base_htmls/partial/_js_files.html" %}
+    {% block render_js_files %}
+    {% endblock render_js_files %}
+  </body>
+</html>
